@@ -39,7 +39,7 @@ OPTIONS:
    -i <n|u>      Create an installable package (n: nightly, u: unsigned stripped release archive)
    -k <sdk>      Use the specified sdk (default: $SDKROOT)
    -a <arch>     Use the specified arch (default: $ARCH)
-   -C            Use the specified VLC build dir
+   -C            Use the specified TotalVideoPlayer build dir
    -b <url>      Enable breakpad support and send crash reports to this URL
 EOF
 
@@ -136,7 +136,7 @@ BUILD_ARCH=`get_buildsystem_arch $BUILD_ARCH`
 BUILD_TRIPLET=$BUILD_ARCH-apple-darwin$OSX_KERNELVERSION
 HOST_TRIPLET=$ARCH-apple-darwin$OSX_KERNELVERSION
 
-info "Building VLC for macOS for architecture ${ACTUAL_ARCH} on a ${BUILD_ARCH} device"
+info "Building TotalVideoPlayer for macOS for architecture ${ACTUAL_ARCH} on a ${BUILD_ARCH} device"
 
 spushd `dirname $0`/../../..
 vlcroot=`pwd`
@@ -338,35 +338,35 @@ fi
 info "Running make -j$JOBS"
 make -j$JOBS
 
-info "Preparing VLC.app"
-make VLC.app
+info "Preparing TotalVideoPlayer.app"
+make TotalVideoPlayer.app
 
 if [ "$PACKAGETYPE" = "u" ]; then
-    info "Copying app with debug symbols into VLC-debug.app and stripping"
-    rm -rf VLC-debug.app
-    cp -Rp VLC.app VLC-debug.app
+    info "Copying app with debug symbols into TotalVideoPlayer-debug.app and stripping"
+    rm -rf VLTotalVideoPlayerC-debug.app
+    cp -Rp TotalVideoPlayer.app TotalVideoPlayer-debug.app
 
     # Workaround for breakpad symbol parsing:
     # Symbols must be uploaded for libvlc(core).dylib, not libvlc(core).x.dylib
-    (cd VLC-debug.app/Contents/MacOS/lib/ && rm libvlccore.dylib && mv libvlccore.*.dylib libvlccore.dylib)
-    (cd VLC-debug.app/Contents/MacOS/lib/ && rm libvlc.dylib && mv libvlc.*.dylib libvlc.dylib)
+    (cd TotalVideoPlayer-debug.app/Contents/MacOS/lib/ && rm libvlccore.dylib && mv libvlccore.*.dylib libvlccore.dylib)
+    (cd TotalVideoPlayer-debug.app/Contents/MacOS/lib/ && rm libvlc.dylib && mv libvlc.*.dylib libvlc.dylib)
 
 
-    find VLC.app/ -name "*.dylib" -exec strip -x {} \;
-    find VLC.app/ -type f -name "VLC" -exec strip -x {} \;
-    find VLC.app/ -type f -name "Sparkle" -exec strip -x {} \;
-    find VLC.app/ -type f -name "Growl" -exec strip -x {} \;
-    find VLC.app/ -type f -name "Breakpad" -exec strip -x {} \;
+    find TotalVideoPlayer.app/ -name "*.dylib" -exec strip -x {} \;
+    find TotalVideoPlayer.app/ -type f -name "TotalVideoPlayer" -exec strip -x {} \;
+    find TotalVideoPlayer.app/ -type f -name "Sparkle" -exec strip -x {} \;
+    find TotalVideoPlayer.app/ -type f -name "Growl" -exec strip -x {} \;
+    find TotalVideoPlayer.app/ -type f -name "Breakpad" -exec strip -x {} \;
 
 if [ "$BUILD_TRIPLET" = "$HOST_TRIPLET" ]; then
-    bin/vlc-cache-gen VLC.app/Contents/MacOS/plugins
+    bin/vlc-cache-gen TotalVideoPlayer.app/Contents/MacOS/plugins
 fi
 
-    info "Building VLC release archive"
+    info "Building TotalVideoPlayer release archive"
     make package-macosx-release
     shasum -a 512 vlc-*-release.zip
 elif [ "$PACKAGETYPE" = "n" -o "$PACKAGE" = "yes" ]; then
-    info "Building VLC dmg package"
+    info "Building TotalVideoPlayer dmg package"
     make package-macosx
 fi
 

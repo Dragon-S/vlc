@@ -64,6 +64,9 @@ char *config_GetLibDir (void)
         if (len >= 3 && !strcmp( psz_img_name + len - 3, "VLC"))
             return strdup( dirname(psz_img_name) );
 
+        if (len >= 16 && !strcmp( psz_img_name + len - 16, "TotalVideoPlayer"))
+            return strdup( dirname(psz_img_name) );
+
         /* Do we end by "VLC-Plugin"? oh, we must be the NPAPI plugin */
         if (len >= 10 && !strcmp( psz_img_name + len - 10, "VLC-Plugin"))
             return strdup( dirname(psz_img_name) );

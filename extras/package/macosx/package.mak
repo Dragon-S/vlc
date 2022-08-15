@@ -10,9 +10,9 @@ pseudo-bundle:
 	$(LN_S) -nf $(CONTRIB_DIR)/Frameworks
 	cd $(top_builddir)/bin/Contents/Resources/ && find $(abs_top_srcdir)/modules/gui/macosx/Resources/ -type f -not -path "*.lproj/*" -exec $(LN_S) -f {} \;
 
-# VLC.app for packaging and giving it to your friends
+# TotalVideoPlayer.app for packaging and giving it to your friends
 # use package-macosx to get a nice dmg
-VLC.app: install
+TotalVideoPlayer.app: install
 	rm -Rf $@
 	## Copy Contents
 	cp -R $(prefix)/share/macosx/ $@
@@ -46,7 +46,7 @@ endif
 	(cd "$(prefix)/include" && $(AMTAR) -c --exclude "plugins" vlc) | $(AMTAR) -x -C $@/Contents/MacOS/include/
 	## Copy translations
 	-cp -r "$(prefix)/share/locale" $@/Contents/MacOS/share/
-	printf "APPLVLC#" >| $@/Contents/PkgInfo
+	printf "APPLTotalVideoPlayer#" >| $@/Contents/PkgInfo
 	## Copy libs
 	mkdir -p $@/Contents/MacOS/lib
 	find $(prefix)/lib -name 'libvlc*.dylib' -maxdepth 1 -exec cp -a {} $@/Contents/MacOS/lib \;
@@ -56,7 +56,7 @@ endif
 	## Copy libbluray jar
 	find "$(CONTRIB_DIR)/share/java/" -name 'libbluray*.jar' -maxdepth 1 -exec cp -a {} $@/Contents/MacOS/plugins \; || true
 	## Install binary
-	cp $(prefix)/bin/vlc $@/Contents/MacOS/VLC
+	cp $(prefix)/bin/vlc $@/Contents/MacOS/TotalVideoPlayer
 	## Generate plugin cache
 	if test "$(build)" = "$(host)"; then \
 		bin/vlc-cache-gen $@/Contents/MacOS/plugins ; \
@@ -67,18 +67,18 @@ endif
 	find $@ -type f -exec chmod ugo+r '{}' \;
 
 
-package-macosx: VLC.app
+package-macosx: TotalVideoPlayer.app
 	rm -f "$(top_builddir)/vlc-$(VERSION).dmg"
 if HAVE_DMGBUILD
 	@echo "Packaging fancy DMG using dmgbuild"
 	cd "$(top_srcdir)/extras/package/macosx/dmg" && dmgbuild -s "dmg_settings.py" \
-		-D app="$(abs_top_builddir)/VLC.app" "VLC Media Player" "$(abs_top_builddir)/vlc-$(VERSION).dmg"
+		-D app="$(abs_top_builddir)/TotalVideoPlayer.app" "VLC Media Player" "$(abs_top_builddir)/vlc-$(VERSION).dmg"
 else !HAVE_DMGBUILD
 	@echo "Packaging non-fancy DMG"
 	## Create directory for DMG contents
 	mkdir -p "$(top_builddir)/vlc-$(VERSION)"
 	## Copy contents
-	cp -Rp "$(top_builddir)/VLC.app" "$(top_builddir)/vlc-$(VERSION)/VLC.app"
+	cp -Rp "$(top_builddir)/TotalVideoPlayer.app" "$(top_builddir)/vlc-$(VERSION)/TotalVideoPlayer.app"
 	## Symlink to Applications so users can easily drag-and-drop the App to it
 	$(LN_S) -f /Applications "$(top_builddir)/vlc-$(VERSION)/"
 	## Create DMG
@@ -88,10 +88,10 @@ else !HAVE_DMGBUILD
 	rm -rf "$(top_builddir)/vlc-$(VERSION)"
 endif
 
-package-macosx-zip: VLC.app
+package-macosx-zip: TotalVideoPlayer.app
 	rm -f "$(top_builddir)/vlc-$(VERSION).zip"
 	mkdir -p $(top_builddir)/vlc-$(VERSION)/Goodies/
-	cp -Rp $(top_builddir)/VLC.app $(top_builddir)/vlc-$(VERSION)/VLC.app
+	cp -Rp $(top_builddir)/TotalVideoPlayer.app $(top_builddir)/vlc-$(VERSION)/TotalVideoPlayer.app
 	cd $(srcdir); cp -R AUTHORS COPYING README THANKS NEWS $(abs_top_builddir)/vlc-$(VERSION)/Goodies/
 	zip -r -y -9 $(top_builddir)/vlc-$(VERSION).zip $(top_builddir)/vlc-$(VERSION)
 	rm -rf "$(top_builddir)/vlc-$(VERSION)"
@@ -99,12 +99,12 @@ package-macosx-zip: VLC.app
 package-macosx-release:
 	rm -f "$(top_builddir)/vlc-$(VERSION)-release.zip"
 	mkdir -p $(top_builddir)/vlc-$(VERSION)-release
-	cp -Rp $(top_builddir)/VLC.app $(top_builddir)/vlc-$(VERSION)-release/
+	cp -Rp $(top_builddir)/TotalVideoPlayer.app $(top_builddir)/vlc-$(VERSION)-release/
 	cp $(srcdir)/extras/package/macosx/dmg/* $(top_builddir)/vlc-$(VERSION)-release/
 	cp "$(srcdir)/extras/package/macosx/codesign.sh" $(top_builddir)/vlc-$(VERSION)-release/
 	cp "$(prefix)/lib/vlc/vlc-cache-gen" $(top_builddir)/vlc-$(VERSION)-release/
 	cp "$(srcdir)/extras/package/macosx/vlc-hardening.entitlements" $(top_builddir)/vlc-$(VERSION)-release/
-	install_name_tool -add_rpath "@executable_path/VLC.app/Contents/MacOS/lib" $(top_builddir)/vlc-$(VERSION)-release/vlc-cache-gen
+	install_name_tool -add_rpath "@executable_path/TotalVideoPlayer.app/Contents/MacOS/lib" $(top_builddir)/vlc-$(VERSION)-release/vlc-cache-gen
 	zip -r -y -9 $(top_builddir)/vlc-$(VERSION)-release.zip $(top_builddir)/vlc-$(VERSION)-release
 	rm -rf "$(top_builddir)/vlc-$(VERSION)-release"
 
@@ -141,5 +141,5 @@ EXTRA_DIST += \
 	extras/package/macosx/dmg/disk_image.icns \
 	extras/package/macosx/dmg/background.tiff \
 	extras/package/macosx/asset_sources/vlc_app_icon.svg \
-	extras/package/macosx/VLC.entitlements \
+	extras/package/macosx/TotalVideoPlayer.entitlements \
 	extras/package/macosx/vlc.xcodeproj/project.pbxproj

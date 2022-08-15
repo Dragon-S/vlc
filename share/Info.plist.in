@@ -1388,7 +1388,7 @@
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
-	<string>VLC</string>
+	<string>TotalVideoPlayer</string>
 	<key>CFBundleIconFile</key>
 	<string>VLC.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -1396,17 +1396,17 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>VLC media player</string>
+	<string>Total Video Player</string>
 	<key>CFBundleDisplayName</key>
-	<string>VLC</string>
+	<string>TotalVideoPlayer</string>
 	<key>CFBundleShortVersionString</key>
 	<string>@VERSION@</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
-	<string>VLC#</string>
+	<string>TotalVideoPlayer#</string>
 	<key>BreakpadProduct</key>
-	<string>VLC</string>
+	<string>TotalVideoPlayer</string>
 	<key>BreakpadVendor</key>
 	<string>VideoLAN</string>
 	<key>BreakpadRequestComments</key>
